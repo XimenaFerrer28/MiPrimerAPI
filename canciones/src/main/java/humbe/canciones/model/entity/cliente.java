@@ -1,7 +1,13 @@
 package humbe.canciones.model.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,19 +16,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder
+@JsonPropertyOrder
 @Table(name = "canciones")
 
 
 public class cliente implements Serializable{	
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@Column(name = "ID_cancion")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +43,8 @@ public class cliente implements Serializable{
 	private String Nombre;
 	@Column(name = "Album")
 	private String Album;
-	@Column(name = "Año_lanzamiento")
+	@Column(name = "Año_lanzamiento", columnDefinition = "DATE")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date Año_lanzamiento;
 	@Column(name = "Duracion")
 	private Integer Duracion;
@@ -39,6 +52,9 @@ public class cliente implements Serializable{
 	private String Compositor;
 	@Column(name = "Productor")
 	private String Productor;
+	@Column(name="Email")
+	private String Email;
+	
 	public Integer getID_cancion() {
 		return ID_cancion;
 	}
@@ -81,5 +97,30 @@ public class cliente implements Serializable{
 	public void setProductor(String productor) {
 		Productor = productor;
 	}
+	public String getEmail() {
+		return Email;
+	}
+	public void setEmail(String email) {
+		Email = email;
+	}
+	public cliente(Integer iD_cancion, String nombre, String album, Date año_lanzamiento, Integer duracion,
+			String compositor, String productor, String email) {
+		super();
+		ID_cancion = iD_cancion;
+		Nombre = nombre;
+		Album = album;
+		Año_lanzamiento = año_lanzamiento;
+		Duracion = duracion;
+		Compositor = compositor;
+		Productor = productor;
+		Email = email;
+	}
+	
+	
+	public cliente() {
+		
+	}
+	
+
 }
 
