@@ -35,7 +35,7 @@ public class clienteController {
 	public cliente create(@RequestBody cliente cliente) {
 		logger.info("Cancion a agregar: "+ cliente);
 		cliente saveCliente = clienteservice.save(cliente);
-		emailservi.enviarCorreoProductoGuardado(saveCliente.getEmail());
+		emailservi.enviarCorreoCacnionGuardado(saveCliente.getEmail());
 		return saveCliente;
 	}
 	
@@ -48,7 +48,7 @@ public class clienteController {
 		}
 		cliente.setID_cancion(id);
 		cliente updatedCleinte = clienteservice.save(cliente);
-		emailservi.enviarCorreoProductoModificado(updatedCleinte.getEmail());
+		emailservi.enviarCorreoCancionModificado(updatedCleinte.getEmail());
 		return updatedCleinte;
 	}
 	
@@ -58,6 +58,11 @@ public class clienteController {
 		cliente clienteDelete = clienteservice.findById(id);
 	    if (clienteDelete != null) {
 	        clienteservice.delete(clienteDelete);
+	        
+	        // Envía el correo de notificación al eliminar la canción
+	        String destinatario = clienteDelete.getEmail();
+	        String cancionEliminada = clienteDelete.getNombre(); // O cualquier otro campo que identifique la canción
+	        emailservi.enviarCorreoCacnionEliminado(destinatario, cancionEliminada); 
 	    } else {
 	        // Si el producto no existe, puedes manejar la situación de alguna manera, como lanzar una excepción o simplemente registrar un mensaje de error.
 	        logger.warn("Intento de eliminar un producto con ID no válido: " + id);
