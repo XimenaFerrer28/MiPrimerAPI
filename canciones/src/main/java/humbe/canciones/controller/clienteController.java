@@ -1,4 +1,5 @@
 package humbe.canciones.controller;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,15 @@ import humbe.canciones.model.entity.cliente;
 import humbe.canciones.server.ICliente;
 import humbe.canciones.server.impl.EmailService;
 @RestController
+
 @RequestMapping("/api/v1")
+
 public class clienteController {
 	@Autowired
 	private ICliente clienteservice;
 	@Autowired
 	private EmailService emailservi;
-	private static final Logger logger =
-	LoggerFactory.getLogger(clienteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(clienteController.class);
 	@PostMapping("cliente")
 	@ResponseStatus(HttpStatus.CREATED)
 	public cliente create(@RequestBody cliente cliente) {
@@ -53,18 +55,12 @@ public class clienteController {
 			clienteservice.delete(clienteDelete);
 			// Envía el correo de notificación al eliminar la canción
 			String destinatario = clienteDelete.getEmail();
-			String cancionEliminada = clienteDelete.getNombre(); // O
-			cualquier otro campo que identifique la canción
-			emailservi.enviarCorreoCacnionEliminado(destinatario,
-			cancionEliminada);
+			String cancionEliminada = clienteDelete.getNombre(); // O cualquier otro campo que identifique la canción
+			emailservi.enviarCorreoCacnionEliminado(destinatario,cancionEliminada);
 		} else {
-			// Si el producto no existe, puedes manejar la situación de
-			alguna manera, como lanzar una excepción o simplemente registrar un mensaje
-			de error.
-			logger.warn("Intento de eliminar un producto con ID no válido: "
-			+ id);
-			// Aquí puedes lanzar una excepción, registrar un mensaje de
-			error, etc.
+			// Si el producto no existe, puedes manejar la situación de alguna manera, como lanzar una excepción o simplemente registrar un mensaje de error.
+			logger.warn("Intento de eliminar un producto con ID no válido: " + id);
+			// Aquí puedes lanzar una excepción, registrar un mensaje de error, etc.
 		}
 	}
 	@GetMapping("cliente/{id}")

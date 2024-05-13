@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: humbe.canciones.CancionesApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.577 s -- in humbe.canciones.CancionesApplicationTests

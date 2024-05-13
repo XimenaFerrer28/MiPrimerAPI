@@ -1,7 +1,7 @@
 package humbe.canciones.model.entity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -103,8 +103,7 @@ public class cliente implements Serializable{
 	public void setEmail(String email) {
 		Email = email;
 	}
-	public cliente(Integer iD_cancion, String nombre, String album, Date año_lanzamiento, Integer duracion,
-			String compositor, String productor, String email) {
+	public cliente(Integer iD_cancion, String nombre, String album, Date año_lanzamiento, Integer duracion,	String compositor, String productor, String email) {
 		super();
 		ID_cancion = iD_cancion;
 		Nombre = nombre;
