@@ -1,10 +1,14 @@
 package humbe.canciones.server.impl;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +20,14 @@ public class EmailService {
   private JavaMailSender javaMailSender;
   @Value("${spring.mail.username}")
   private String remitente;
+  
+  
+  // Metodo para verificar la identidad del usuario 
+  public void enviarCorreoAutenticacion(String destinatario, String usuario) {
+	    String asunto = "Bienvenido " + usuario + " Al sistema de administrador de Canciones";
+	    String mensaje = "<html><body><h1>Usuario Almacenado</h1> "+ usuario +" <p>Comprueba tu cuenta</p><p>Tu cuenta ya esta lista, solo debes comprobarla en el siguiente enlace: </p></body></html>";
+	    enviarCorreo(destinatario, asunto, mensaje);
+	  }
   // Método para enviar correo de confirmación al guardar un cancion
   public void enviarCorreoCacnionGuardado(String destinatario) {
     String asunto = "Cancion Almacenado";
@@ -37,8 +49,7 @@ public class EmailService {
   }
   // Método genérico para enviar correo electrónico
   // Método genérico para enviar correo electrónico
-  private void enviarCorreo(String destinatario, String asunto, String
-  mensaje) {
+  private void enviarCorreo(String destinatario, String asunto, String  mensaje) {
     MimeMessage message = javaMailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message,
     StandardCharsets.UTF_8.name());

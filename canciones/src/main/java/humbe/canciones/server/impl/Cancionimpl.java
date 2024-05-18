@@ -3,22 +3,25 @@ package humbe.canciones.server.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import humbe.canciones.exception.*;
-import humbe.canciones.model.dao.ClienteDao;
-import humbe.canciones.model.entity.cliente;
-import humbe.canciones.server.ICliente;
+
+import humbe.canciones.exception.NotFoundException;
+import humbe.canciones.model.dao.CancionDao;
+import humbe.canciones.model.entity.Cancion;
+import humbe.canciones.server.ICancion;
 @Service
-public class Clienteimpl implements ICliente{
+public class Cancionimpl implements ICancion{
 	@Autowired
-	private ClienteDao clienteDao;
+	private CancionDao clienteDao;
 	@Transactional
 	@Override
-	public cliente save(cliente cliente) {
-		if(cliente.getID_cancion() == null) {
+	// este metodo crear y modifica los registros, es por eso que tomamos el id para verificar si existe el registro en caso de que no exista 
+	// esto quiere decir que sera un registro nuevo
+	public Cancion save(Cancion cliente) {
+		if(cliente.getId_cancion() == null) {
 			return clienteDao.save(cliente);
 		}else {
-			cliente exxiteCliente =
-			clienteDao.findById(cliente.getID_cancion()).orElse(null);
+			Cancion exxiteCliente =
+			clienteDao.findById(cliente.getId_cancion()).orElse(null);
 			if (exxiteCliente != null) {
 				exxiteCliente.setAlbum(cliente.getAlbum());
 				exxiteCliente.setAño_lanzamiento(cliente.getAño_lanzamiento(
@@ -29,21 +32,21 @@ public class Clienteimpl implements ICliente{
 				exxiteCliente.setProductor(cliente.getProductor());
 				return clienteDao.save(exxiteCliente);
 			}else {
-				throw new NotFoundException("Producto no encontrado con el ID: " + cliente.getID_cancion());
+				throw new NotFoundException("Producto no encontrado con el ID: " + cliente.getId_cancion());
 			}
 		}
 	}
 	@Transactional
 	@Override
-	public cliente findById(Integer id) {
+	public Cancion findById(Integer id) {
 		return clienteDao.findById(id).orElse(null);
 	}
 	@Override
-	public void delete(cliente cliente) {
+	public void delete(Cancion cliente) {
 		clienteDao.delete(cliente);
 	}
 	@Override
-	public Iterable<cliente> findAll() {
+	public Iterable<Cancion> findAll() {
 		return clienteDao.findAll();
 	}
 }
