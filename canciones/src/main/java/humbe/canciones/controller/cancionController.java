@@ -1,5 +1,8 @@
 package humbe.canciones.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,44 +16,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import humbe.canciones.model.entity.cliente;
-import humbe.canciones.server.ICliente;
+import humbe.canciones.model.entity.Cancion;
+import humbe.canciones.server.ICancion;
 import humbe.canciones.server.impl.EmailService;
 @RestController
 
 @RequestMapping("/api/v1")
 
-public class clienteController {
+public class cancionController {
 	@Autowired
-	private ICliente clienteservice;
+	private ICancion clienteservice;
 	@Autowired
 	private EmailService emailservi;
-	private static final Logger logger = LoggerFactory.getLogger(clienteController.class);
-	@PostMapping("cliente")
+	private static final Logger logger = LoggerFactory.getLogger(cancionController.class);
+	@PostMapping("cancion")
 	@ResponseStatus(HttpStatus.CREATED)
-	public cliente create(@RequestBody cliente cliente) {
+	public Cancion create(@RequestBody Cancion cliente) {
 		logger.info("Cancion a agregar: "+ cliente);
-		cliente saveCliente = clienteservice.save(cliente);
+		Cancion saveCliente = clienteservice.save(cliente);
+		
+		 // Acceder a la fecha de lanzamiento y convertirla a una cadena formateada
+	    Date añoLanzamiento = cliente.getAño_lanzamiento();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    String fechaFormateada = sdf.format(añoLanzamiento);
+	    
+	    // Imprimir la fecha formateada en el registro de información
+	    logger.info("Fecha de lanzamiento: " + fechaFormateada);
+		
 		emailservi.enviarCorreoCacnionGuardado(saveCliente.getEmail());
 		return saveCliente;
 	}
-	@PutMapping("cliente/{id}")
+	@PutMapping("cancion/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public cliente update(@PathVariable Integer id, @RequestBody cliente
+	public Cancion update(@PathVariable Integer id, @RequestBody Cancion
 	cliente) {
-		cliente existingClien = clienteservice.findById(id);
+		Cancion existingClien = clienteservice.findById(id);
 		if(existingClien == null) {
 		logger.warn("Cancion no encontrada ");
 	}
-	cliente.setID_cancion(id);
-	cliente updatedCleinte = clienteservice.save(cliente);
+	cliente.setId_cancion(id);
+	Cancion updatedCleinte = clienteservice.save(cliente);
 	emailservi.enviarCorreoCancionModificado(updatedCleinte.getEmail());
 	return updatedCleinte;
 	}
-	@DeleteMapping("cliente/{id}")
+	@DeleteMapping("cancion/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
-		cliente clienteDelete = clienteservice.findById(id);
+		Cancion clienteDelete = clienteservice.findById(id);
 		if (clienteDelete != null) {
 			clienteservice.delete(clienteDelete);
 			// Envía el correo de notificación al eliminar la canción
@@ -63,14 +75,14 @@ public class clienteController {
 			// Aquí puedes lanzar una excepción, registrar un mensaje de error, etc.
 		}
 	}
-	@GetMapping("cliente/{id}")
+	@GetMapping("cancion/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public cliente showById(@PathVariable Integer id) {
+	public Cancion showById(@PathVariable Integer id) {
 		return clienteservice.findById(id);
 	}
-	@GetMapping("cliente")
+	@GetMapping("cancion")
 	@ResponseStatus(HttpStatus.OK)
-	public Iterable<cliente> show() {
+	public Iterable<Cancion> show() {
 		return clienteservice.findAll();
 	}
 }
