@@ -1,10 +1,15 @@
 package humbe.canciones.model.entity;
 
+
+
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +36,7 @@ public class Usuario {
 	
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "password")
 	private String password;
 	
@@ -39,9 +44,10 @@ public class Usuario {
 	private String token;
 	
 	@Column(name="confirmado")
-	private Boolean confirmado;
+	private Integer confirmado;
 
-	
+	@OneToMany(mappedBy = "usuario")
+	private List<Cancion> canciones;
 	
 	
 	
@@ -93,11 +99,11 @@ public class Usuario {
 		this.token = token;
 	}
 
-	public Boolean getConfirmado() {
+	public Integer getConfirmado() {
 		return confirmado;
 	}
 
-	public void setConfirmado(Boolean confirmado) {
+	public void setConfirmado(Integer confirmado) {
 		this.confirmado = confirmado;
 	}
 	
